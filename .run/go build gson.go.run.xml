@@ -1,0 +1,13 @@
+<component name="ProjectRunConfigurationManager">
+  <configuration default="false" name="go build gson" type="GoApplicationRunConfiguration" factoryName="Go Application" nameIsGenerated="true">
+    <module name="gson" />
+    <working_directory value="$PROJECT_DIR$" />
+    <go_parameters value="-o gson" />
+    <kind value="FILE" />
+    <package value="gson" />
+    <directory value="$PROJECT_DIR$" />
+    <filePath value="$PROJECT_DIR$/gson.go" />
+    <output_directory value="$PROJECT_DIR$" />
+    <method v="2" />
+  </configuration>
+</component>
