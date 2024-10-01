@@ -30,9 +30,16 @@ func TestGson_Get(t *testing.T) {
 
 func TestGson_Set(t *testing.T) {
     data := Parse(gson)
-    err := data.Set("name.last", "Jack")
+    _, err := data.Set("name.last", "Jack")
     assert.Nil(t, err)
     value := data.Get("name.last")
     fmt.Println("name.last", "is", value)
     assert.Equal(t, "Jack", value.String())
+}
+
+func TestGson_GetGson(t *testing.T) {
+    data, err := Parse(gson).GetGson("name").SetRaw("sub", gson)
+    assert.Nil(t, err)
+    data.Print()
+    assert.Equal(t, "Janet", data.GetGson("sub").Get("name.first").String())
 }

@@ -1,5 +1,8 @@
 // Package gson provides searching for json strings and setting json values
-// It's just a simple wrapper for the [gjson]: https://github.com/tidwall/gjson and [sjson]: https://github.com/tidwall/sjson
+// It's just a simple wrapper for the [gjson] and [sjson]
+//
+// [gjson]: https://github.com/tidwall/gjson
+// [sjson]: https://github.com/tidwall/sjson
 package gson
 
 import (
@@ -10,7 +13,9 @@ import (
     "github.com/tidwall/sjson"
 )
 
-// Gson Note that when using the Get method, the returned result is gjson.Result instead of Gson
+// Gson Inherits from [gjson.Result]
+// Note that when using the Get method, the returned result is gjson.Result instead of Gson
+// You may need to use the [GetGson] method
 type Gson struct {
     gjson.Result
 }
@@ -52,9 +57,15 @@ func (gson *Gson) UnmarshalJSON(data []byte) error {
     return nil
 }
 
+// GetGson searches result for the specified path. The result should be a JSON array or object.
+func (gson *Gson) GetGson(path string) *Gson {
+    return &Gson{gson.Get(path)}
+}
+
 /*
 Set sets a json value for the specified path.
 A path is in dot syntax, such as "name.last" or "age".
+A value should be a simple JSON value and not a JSON string.
 This function expects that the json is well-formed, and does not validate.
 Invalid json will not panic, but it may return back unexpected results.
 An error is returned if the path is not valid.
@@ -74,29 +85,35 @@ A path is a series of keys separated by a dot.
  "age"                >> 37
  "children.1"         >> "Alex"
 */
-func (gson *Gson) Set(path string, value interface{}) (err error) {
+func (gson *Gson) Set(path string, value interface{}) (json *Gson, err error) {
     var raw string
     raw, err = sjson.Set(gson.Raw, path, value)
-    gson.Result = gjson.Parse(raw)
-    return
+    if err == nil {
+        gson.Result = gjson.Parse(raw)
+    }
+    return gson, err
 }
 
 // SetRaw sets a raw json value for the specified path.
 // This function works the same as Set except that the value is set as a
 // raw block of json. This allows for setting premarshalled json objects.
-func (gson *Gson) SetRaw(path, value string) (err error) {
+func (gson *Gson) SetRaw(path, value string) (json *Gson, err error) {
     var raw string
     raw, err = sjson.SetRaw(gson.Raw, path, value)
-    gson.Result = gjson.Parse(raw)
-    return
+    if err == nil {
+        gson.Result = gjson.Parse(raw)
+    }
+    return gson, err
 }
 
 // Delete deletes a value from json for the specified path.
-func (gson *Gson) Delete(path string) (err error) {
+func (gson *Gson) Delete(path string) (json *Gson, err error) {
     var raw string
     raw, err = sjson.Delete(gson.Raw, path)
-    gson.Result = gjson.Parse(raw)
-    return
+    if err == nil {
+        gson.Result = gjson.Parse(raw)
+    }
+    return gson, err
 }
 
 // Print Pretty print for debug purpose
