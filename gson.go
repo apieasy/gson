@@ -1,4 +1,5 @@
 // Package gson provides searching for json strings and setting json values
+//
 // It's just a simple wrapper for the [gjson] and [sjson]
 //
 // [gjson]: https://github.com/tidwall/gjson
@@ -14,8 +15,10 @@ import (
 )
 
 // Gson Inherits from [gjson.Result]
-// Note that when using the Get method, the returned result is gjson.Result instead of Gson
-// You may need to use the [GetGson] method
+//
+// Note that when using the Get method, the returned result is [gjson.Result] instead of [Gson]
+//
+// You may need to use the [Gson.GetGson] method
 type Gson struct {
     gjson.Result
 }
