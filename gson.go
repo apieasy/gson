@@ -56,7 +56,11 @@ func (gson *Gson) MarshalJSON() ([]byte, error) {
 
 // UnmarshalJSON Deserialize data to gson
 func (gson *Gson) UnmarshalJSON(data []byte) error {
-    gson.Result = gjson.ParseBytes(data)
+    if data[0] == '"' {
+        gson.Result.Raw = string(data)
+    } else {
+        gson.Result = gjson.ParseBytes(data)
+    }
     return nil
 }
 

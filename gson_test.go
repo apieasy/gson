@@ -1,6 +1,7 @@
 package gson
 
 import (
+    "encoding/json"
     "fmt"
     "github.com/stretchr/testify/assert"
     "testing"
@@ -42,4 +43,22 @@ func TestGson_GetGson(t *testing.T) {
     assert.Nil(t, err)
     data.Print()
     assert.Equal(t, "Janet", data.GetGson("sub").Get("name.first").String())
+}
+
+func TestGson_UnmarshalJSON(t *testing.T) {
+    data := New()
+
+    type User struct {
+        Name string `json:"name"`
+        Age  int    `json:"age"`
+    }
+    marshal, err := json.Marshal(User{"jack", 12})
+    assert.Nil(t, err)
+    err = json.Unmarshal(marshal, data)
+    assert.Nil(t, err)
+    data.Print()
+
+    err = json.Unmarshal([]byte(`"raw string"`), data)
+    assert.Nil(t, err)
+    data.Print()
 }
