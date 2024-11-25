@@ -128,3 +128,22 @@ func (gson *Gson) Print() {
 	jsonData, _ := json.MarshalIndent(gson, "", "  ")
 	fmt.Println(string(jsonData))
 }
+
+// PrettyPrint print any struct or raw json string
+func PrettyPrint(v any) {
+	switch v := v.(type) {
+	case string:
+		var jsonMap map[string]interface{}
+		// 解析 JSON 字符串到一个通用的 map 结构中
+		err := json.Unmarshal([]byte(v), &jsonMap)
+		if err != nil {
+			fmt.Println(v, "is not a json object")
+			return
+		}
+		prettyJSON, _ := json.MarshalIndent(jsonMap, "", "  ")
+		fmt.Println(string(prettyJSON))
+	default:
+		prettyJSON, _ := json.MarshalIndent(v, "", "  ")
+		fmt.Println(string(prettyJSON))
+	}
+}
